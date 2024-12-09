@@ -103,13 +103,12 @@ class ImagePredictionPipeline:
 
         return predicted_class, class_probabilities, probabilities
 
-# Initialize the pipeline
 pipeline = ImagePredictionPipeline(
     hf_model_path='google/path-foundation',
     joblib_model_path= MODEL_DIR / 'optimized_mlp_model.joblib'
 )
 
-# Example usage
+
 image_path = '/home/halleluyah/Documents/Programming-Projects/organisation-projects/artificial-intelligence/src/test_images/temp_sampled/adenosis/SOB_B_A-14-22549AB-40-015.png'
 predicted_class, class_probabilities, raw_probabilities = pipeline.predict(image_path)
 
