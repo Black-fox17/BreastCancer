@@ -1,3 +1,4 @@
+import os
 import joblib
 import google.generativeai as genai
 from PIL import Image
@@ -8,13 +9,14 @@ from huggingface_hub import from_pretrained_keras
 import matplotlib.pyplot as plt
 from huggingface_hub import login
 import google.generativeai as genai
+from dotenv import load_dotenv
+load_dotenv()
 
-
-genai.configure(api_key = genai_api_key)#put your genai api key here
+genai.configure(api_key = os.getenv('GOOGLE_GEMINI_API_KEY'))#put your genai api key here
 model = genai.GenerativeModel(model_name="gemini-1.5-flash")
 
-clf_pipeline = joblib.load("trained_model.pkl")
-login(token= huggingface_key)# Your huggingface token
+clf_pipeline = joblib.load("../models/binary_classifier.pkl")
+login(token= os.getenv('HUGGINGFACE_HUB_API_KEY'))# Your huggingface token
 
 # from patch_embedding_types import EmbeddingResult
 
