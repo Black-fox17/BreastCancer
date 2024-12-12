@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "e234d8c8ccd23a0cc6f6d2c00b9a42efd7f224088c2a6c519ca5ac06e0b837ff"
+            "sha256": "8a8756954a2c1f43a968ec6fee0fd3462bb419e3eff848954633e202ac31ab46"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -1668,6 +1668,15 @@
             ],
             "markers": "python_version >= '3.9'",
             "version": "==2.5.0"
+        },
+        "tf-keras": {
+            "hashes": [
+                "sha256:c431d04027eef790fcd3261cf7fdf93eb74f3cb32e05078b57b7f5a54bd53262",
+                "sha256:ebf744519b322afead33086a2aba872245473294affd40973694f3eb7c7ad77d"
+            ],
+            "index": "pypi",
+            "markers": "python_version >= '3.9'",
+            "version": "==2.18.0"
         },
         "threadpoolctl": {
             "hashes": [

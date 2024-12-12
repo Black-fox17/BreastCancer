@@ -17,6 +17,7 @@ pydantic-settings = "*"
 fastapi = {extras = ["standard"], version = "*"}
 uvicorn = "*"
 scikit-learn = "*"
+tf-keras = "*"
 
 [dev-packages]
 

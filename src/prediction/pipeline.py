@@ -108,11 +108,10 @@ pipeline = ImagePredictionPipeline(
     joblib_model_path= MODEL_DIR / 'optimized_mlp_model.joblib'
 )
 
+# image_path = '/home/halleluyah/Documents/Programming-Projects/organisation-projects/artificial-intelligence/src/test_images/temp_sampled/adenosis/SOB_B_A-14-22549AB-40-015.png'
+# predicted_class, class_probabilities, raw_probabilities = pipeline.predict(image_path)
 
-image_path = '/home/halleluyah/Documents/Programming-Projects/organisation-projects/artificial-intelligence/src/test_images/temp_sampled/adenosis/SOB_B_A-14-22549AB-40-015.png'
-predicted_class, class_probabilities, raw_probabilities = pipeline.predict(image_path)
-
-print(f"Predicted Class: {predicted_class}")
-print("Class Probabilities:")
-for cls, prob in class_probabilities.items():
-    print(f"  Class: {cls}, Probability: {prob:.4f}")
+# print(f"Predicted Class: {predicted_class}")
+# print("Class Probabilities:")
+# for cls, prob in class_probabilities.items():
+#   print(f"  Class: {cls}, Probability: {prob:.4f}")
