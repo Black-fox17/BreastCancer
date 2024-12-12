@@ -1,31 +1,44 @@
-from fastapi import APIRouter, File, UploadFile, HTTPException
-from fastapi.responses import JSONResponse
-from PIL import Image
-from src.prediction.preprocess import preprocess_image
-from src.prediction.predict import predict
-
-router = APIRouter()
+import numpy as np
+from src.models.load_models import get_hf_model, get_joblib_model
 
 
-@router.post("/predict")
-async def predict_image(file: UploadFile = File(...)):
+def generate_embedding(preprocessed_image: np.ndarray) -> np.ndarray:
     """
-    Endpoint to predict the class and probabilities of an uploaded image.
+    Generates an embedding for a preprocessed image.
 
     Args:
-        file (UploadFile): The uploaded image file.
+        preprocessed_image (np.ndarray): Preprocessed image tensor.
 
     Returns:
-        JSONResponse: Predicted class and probabilities.
+        np.ndarray: Generated embedding.
     """
-    try:
-        image = Image.open(file.file)
-        preprocessed_image = preprocess_image(image)
-        predicted_class, class_probabilities, _ = predict(preprocessed_image)
+    hf_model = get_hf_model()
+    result = hf_model.signatures['serving_default'](
+        tf.constant(preprocessed_image, dtype=tf.float32)
+    )
+    return result['output_0'].numpy().flatten()
 
-        return JSONResponse(content={
-            "predicted_class": predicted_class,
-            "class_probabilities": class_probabilities
-        })
-    except Exception as e:
-        raise HTTPException(status_code=400, detail=f"Error processing image: {e}")
+
+def predict(preprocessed_image: np.ndarray):
+    """
+    Predicts the class and probabilities for a given preprocessed image.
+
+    Args:
+        preprocessed_image (np.ndarray): Preprocessed image.
+
+    Returns:
+        tuple: Predicted class label, class-probability mapping, raw probabilities.
+    """
+    # Generate embedding
+    embedding = generate_embedding(preprocessed_image).reshape(1, -1)
+
+    # Perform prediction
+    joblib_model = get_joblib_model()
+    predicted_class = joblib_model.predict(embedding)[0]
+    probabilities = joblib_model.predict_proba(embedding)[0]
+
+    class_probabilities = {
+        label: prob for label, prob in zip(joblib_model.classes_, probabilities)
+    }
+
+    return predicted_class, class_probabilities, probabilities

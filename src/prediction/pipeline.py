@@ -10,7 +10,7 @@ from pathlib import Path
 # Load environment variables
 load_dotenv()
 BASE_DIR = Path(__file__).parent.parent
-MODEL_DIR = BASE_DIR / "models"
+MODEL_DIR = BASE_DIR / "/models/model_files"
 os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 
 # Login to Hugging Face
@@ -103,10 +103,10 @@ class ImagePredictionPipeline:
 
         return predicted_class, class_probabilities, probabilities
 
-pipeline = ImagePredictionPipeline(
-    hf_model_path='google/path-foundation',
-    joblib_model_path= MODEL_DIR / 'optimized_mlp_model.joblib'
-)
+# pipeline = ImagePredictionPipeline(
+#     hf_model_path='google/path-foundation',
+#     joblib_model_path= MODEL_DIR / 'optimized_mlp_model.joblib'
+# )
 
 # image_path = '/home/halleluyah/Documents/Programming-Projects/organisation-projects/artificial-intelligence/src/test_images/temp_sampled/adenosis/SOB_B_A-14-22549AB-40-015.png'
 # predicted_class, class_probabilities, raw_probabilities = pipeline.predict(image_path)

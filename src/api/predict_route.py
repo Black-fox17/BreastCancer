@@ -7,7 +7,7 @@ from PIL import Image
 router = APIRouter()
 
 BASE_DIR = Path(__file__).parent.parent
-MODEL_DIR = BASE_DIR / "models"
+MODEL_DIR = BASE_DIR / "models/model_files"
 
 pipeline = ImagePredictionPipeline(
     hf_model_path='google/path-foundation',
