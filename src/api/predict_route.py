@@ -2,7 +2,9 @@ from fastapi import APIRouter, File, UploadFile, HTTPException
 from fastapi.responses import JSONResponse
 from src.prediction.pipeline import ImagePredictionPipeline
 from pathlib import Path
-from PIL import Image
+from io import BytesIO
+import warnings
+warnings.filterwarnings('ignore')
 
 router = APIRouter()
 
@@ -16,7 +18,7 @@ pipeline = ImagePredictionPipeline(
 
 
 @router.post('/predict', tags=['predictor'])
-def predict_tumor(file: UploadFile = File(...)):
+async def predict_tumor(file: UploadFile = File(...)):
     """
     Endpoint to predict the class and probabilities of an uploaded image.
 
@@ -26,13 +28,9 @@ def predict_tumor(file: UploadFile = File(...)):
     Returns:
         JSONResponse: Predicted class and probabilities.
     """
+    file_bytes = BytesIO(await file.read())
     try:
-        image = Image.open(file.file)
-        tumor_class, class_probabilities, _ = pipeline.predict(image)
-        result = {
-            'predicted_class': tumor_class,
-            'probabilities': class_probabilities,
-        }
-        return JSONResponse(content = result)
+        result = pipeline.predict(file_bytes)
+        return {"success": True, "result": result}
     except Exception as e:
-        return HTTPException(status_code=400, detail = f'Error processing Image: {e}')
+        return {"success": False, "error": str(e)}
