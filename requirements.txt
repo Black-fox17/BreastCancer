@@ -1,0 +1,15 @@
+joblib
+google-generativeai
+pillow
+numpy
+matplotlib
+huggingface-hub
+tensorflow
+python-dotenv
+pydantic
+pydantic-settings
+fastapi
+fastapi[standard]
+uvicorn
+scikit-learn
+tf-keras
