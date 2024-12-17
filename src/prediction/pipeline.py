@@ -7,21 +7,25 @@ from dotenv import load_dotenv
 import joblib
 from pathlib import Path
 from io import BytesIO
+from keras.layers import TFSMLayer
 import warnings
+
+
 warnings.filterwarnings('ignore')
+
+
 
 # Load environment variables
 load_dotenv()
 BASE_DIR = Path(__file__).parent.parent
+path_foundation = os.path.join(BASE_DIR,"models","path-foundation")
+joblib_path = os.path.join(BASE_DIR,"models","model_files","optimized_mlp_model.joblib")
 MODEL_DIR = BASE_DIR / "models/model_files"
 os.environ["CUDA_VISIBLE_DEVICES"] = "-1"  # Disable GPU for compatibility if needed
 
-# Login to Hugging Face
-login(token=os.getenv('HUGGINGFACE_HUB_API_KEY'))
-
 
 class ImagePredictionPipeline:
-    def __init__(self, hf_model_path: str, joblib_model_path: str):
+    def __init__(self, joblib_model_path: str = joblib_path, hf_model_path: str = path_foundation):
         """
         Initializes the prediction pipeline.
 
@@ -37,7 +41,7 @@ class ImagePredictionPipeline:
     def _load_huggingface_model(self) -> tf.keras.Model:
         """Loads the Hugging Face model."""
         print("Loading Hugging Face model...")
-        return from_pretrained_keras(self.hf_model_path, compile=False)
+        return TFSMLayer(self.hf_model_path, call_endpoint="serving_default")
 
     def _load_joblib_model(self):
         """Loads the classification model saved with joblib."""
@@ -76,7 +80,7 @@ class ImagePredictionPipeline:
         """
         preprocessed_image = self.preprocess_image(image)
         try:
-            result = self.hf_model.signatures['serving_default'](
+            result = self.hf_model(
                 tf.constant(preprocessed_image, dtype=tf.float32)
             )
             # Convert the result to a Python list
